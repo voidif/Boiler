@@ -1,0 +1,1 @@
+{"version":3,"sources":["index.css"],"names":[],"mappings":"AAAA,UACE,SACF,CAEA,MACE,UACF","file":"main.730bd522.chunk.css","sourcesContent":[".occupied {\n  color: red\n}\n\n.free {\n  color: black\n}"]}
