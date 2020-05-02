@@ -1,0 +1,1 @@
+sudo nohup mvn exec:java -Dexec.mainClass="com.yifu.Boiler.BoilerApplication" &
