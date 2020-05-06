@@ -6,6 +6,8 @@ import com.yifu.Boiler.domain.BoilerStates;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.concurrent.TimeUnit;
+
 @Service
 public class BoilerStateQueryService {
     @Autowired
@@ -14,7 +16,11 @@ public class BoilerStateQueryService {
     public BoilerState getCurrentBoilerState() {
         synchronized (boilerStateDatabase) {
             BoilerStates boilerState = boilerStateDatabase.getBoilerState();
-            return new BoilerState(boilerState.name());
+            int countDownTime = 0;
+            if (boilerState == BoilerStates.Occupied) {
+                countDownTime = (int)boilerStateDatabase.getCountdownTimerFutureTask().getDelay(TimeUnit.SECONDS);
+            }
+            return new BoilerState(boilerState.name(), countDownTime);
         }
     }
 }

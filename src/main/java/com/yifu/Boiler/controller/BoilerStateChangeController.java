@@ -1,35 +1,41 @@
 package com.yifu.Boiler.controller;
 
-import com.yifu.Boiler.domain.RequestResult;
+import com.yifu.Boiler.domain.ResponseMsg;
 import com.yifu.Boiler.exception.NoNeedToChangeStateException;
 import com.yifu.Boiler.service.BoilerStateChangeService;
+import com.yifu.Boiler.utils.ControllerProperties;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+@CrossOrigin
 @RestController
 public class BoilerStateChangeController {
     @Autowired
     BoilerStateChangeService boilerStateChangeService;
+    @Autowired
+    ControllerProperties controllerProperties;
 
     @RequestMapping(value = "/state/occupied", method = RequestMethod.POST)
-    public RequestResult occupyBoiler() {
+    public ResponseMsg occupyBoiler(Integer time) {
         try {
-            boilerStateChangeService.occupyBoiler();
-            return new RequestResult("successful");
+            boilerStateChangeService.occupyBoiler(time);
+            return ResponseMsg.builder().
+                    status(controllerProperties.getSuccessCode()).build();
         } catch (NoNeedToChangeStateException e) {
-            return new RequestResult("failed");
+            return ResponseMsg.builder().
+                    status(controllerProperties.getFailureCode()).build();
         }
     }
 
     @RequestMapping(value = "/state/free", method = RequestMethod.POST)
-    public RequestResult freeBoiler() {
+    public ResponseMsg freeBoiler() {
         try {
             boilerStateChangeService.freeBoiler();
-            return new RequestResult("successful");
+            return ResponseMsg.builder().
+                    status(controllerProperties.getSuccessCode()).build();
         } catch (NoNeedToChangeStateException e) {
-            return new RequestResult("failed");
+            return ResponseMsg.builder().
+                    status(controllerProperties.getFailureCode()).build();
         }
     }
 }
